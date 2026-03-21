@@ -57,6 +57,12 @@ def write_to_db(now_datetime, currentDay, remainGB, overAllState, overAllStateGb
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
+        # TODO: replace this temporary solution with a more robust method for handling the start of a new cycle
+        if currentDay == 1:
+            logging.info("First day of the cycle — dropping quota_log table for a fresh start.")
+            cursor.execute("DROP TABLE IF EXISTS quota_log")
+            conn.commit()
+
         ensure_table_exists(cursor)
 
         # Get previous remaining GBs to calculate usage

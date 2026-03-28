@@ -84,6 +84,18 @@ That's everything — the workflow is ready to go. It will run automatically eve
 
 To test it or trigger it manually at any time, go to the **Actions** tab → **Daily Quota Tracker** → **Run workflow**.
 
+If the workflow ran successfully, a new record will be added to your `quota_log` table and you'll see output like this in the Actions log:
+
+```
+INFO:root:─── Quota Record Saved ───────────────────
+INFO:root:  Day            : 9
+INFO:root:  Usage Today    : 4.3 GB
+INFO:root:  Remaining      : 268.8 / 400.0 GB (32.8% used)
+INFO:root:  Remaining Days : 21
+INFO:root:  Overall State  : Over by 11.2 GB (0.8 days)
+INFO:root:──────────────────────────────────────────
+```
+
 ---
 
 ## How to Run Locally
@@ -122,7 +134,17 @@ DATABASE_URL=postgresql://user:password@host/dbname?sslmode=require
 python main.py
 ```
 
-Logs will print to the console and a record will be inserted into your database.
+If successful, a record will be inserted into your database and you'll see output like this:
+
+```
+INFO:root:─── Quota Record Saved ───────────────────
+INFO:root:  Day            : 9
+INFO:root:  Usage Today    : 4.3 GB
+INFO:root:  Remaining      : 268.8 / 400.0 GB (32.8% used)
+INFO:root:  Remaining Days : 21
+INFO:root:  Overall State  : Over by 11.2 GB (0.8 days)
+INFO:root:──────────────────────────────────────────
+```
 
 ---
 

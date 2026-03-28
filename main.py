@@ -327,18 +327,13 @@ with requests.Session() as session:
 
 
                 if db_success:
-                
-                    message = (
-                        "Record added successfully!\n"
-
-                        f"Day{currentDay} Usage: {dailyUsage:.1f} GBs \n"
-
-                        f"Remaining Days: {remainingDays}\n"
-                        f"{remainGB} / {totalGB} GBs Remaining ({usagePrc:.1f}% Used)\n"
-                        f"Overall State: {overAllState} ({overAllStateGbs:.1f} GBs => {stateDays:.1f} Days)\n"
-                    )
-
-                    print(message)
+                    logging.info("─── Quota Record Saved ───────────────────")
+                    logging.info("  Day            : %d", currentDay)
+                    logging.info("  Usage Today    : %.1f GB", dailyUsage)
+                    logging.info("  Remaining      : %.1f / %s GB (%.1f%% used)", remainGB, totalGB, usagePrc)
+                    logging.info("  Remaining Days : %d", remainingDays)
+                    logging.info("  Overall State  : %s by %.1f GB (%.1f days)", overAllState, overAllStateGbs, stateDays)
+                    logging.info("──────────────────────────────────────────")
                     
                 else:
                     logging.error("Couldn't add record to database. Please check your DB connection and try again.")

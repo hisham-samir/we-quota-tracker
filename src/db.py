@@ -40,13 +40,20 @@ def insert_record(currentDay, remainGB, overAllState, overAllStateGbs, stateDays
         conn = get_db_connection()
         cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
+        # Ensure table exists first so we can query the last recorded day
+        ensure_table_exists(cursor)
+
+        # Detect a new cycle: either day 1 explicitly, or currentDay rolled back (day-1 run was missed)
+        cursor.execute("SELECT day FROM quota_log ORDER BY id DESC LIMIT 1")
+        last_day_row = cursor.fetchone()
+        last_day = last_day_row["day"] if last_day_row else None
+
         # TODO: replace this temporary solution with a more robust method for handling the start of a new cycle
-        if currentDay == 1:
-            logging.info("First day of the cycle — dropping quota_log table for a fresh start.")
+        if currentDay == 1 or (last_day is not None and currentDay < last_day):
+            logging.info("New cycle detected — dropping quota_log table for a fresh start.")
             cursor.execute("DROP TABLE IF EXISTS quota_log")
             conn.commit()
-
-        ensure_table_exists(cursor)
+            ensure_table_exists(cursor)
 
         # Get previous remaining GBs to calculate usage
         cursor.execute("SELECT remaining_gbs FROM quota_log ORDER BY id DESC LIMIT 1")

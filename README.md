@@ -24,7 +24,7 @@ A Python automation tool that tracks your **WE (Telecom Egypt) home internet quo
 5. Sends a Telegram notification with your daily quota summary.
 6. Runs automatically every day via GitHub Actions scheduled workflow.
 
-> **Note:** On the 1st day of every cycle, the table is automatically cleared for a fresh monthly log.
+> **Note:** On the 1st day of every cycle, the `quota_log` table is automatically **dropped and recreated** for a completely fresh monthly log.
 
 | Column           | Type          | Description                                                    |
 | ---------------- | ------------- | -------------------------------------------------------------- |
@@ -63,9 +63,23 @@ we-quota-tracker/
 
 ## Automated Daily Runs
 
-### 1. Fork or push the repo to GitHub
+### 1. Fork the repository on GitHub
 
-### 2. Set up a PostgreSQL database
+### 2. Enable GitHub Actions on your fork
+
+> **Important:** GitHub **disables workflows by default** on forked repositories to prevent unintended automated runs.
+
+After forking, you must manually enable them:
+
+1. Go to your forked repository on GitHub.
+2. Click the **Actions** tab.
+3. Click **"I understand my workflows, go ahead and enable them"**.
+
+Without this step, the scheduled workflow will never run.
+
+> **Note:** GitHub automatically **disables scheduled workflows after 60 days of repository inactivity** (no commits or pushes). If the workflow stops running, go to the **Actions** tab → **Daily Quota Tracker** → **Enable workflow** to re-enable it.
+
+### 3. Set up a PostgreSQL database
 
 You can use any PostgreSQL database you already have. If you don't have one, you'll need a cloud-hosted database so the script can connect to it from GitHub Actions.
 
@@ -86,7 +100,7 @@ Here's how to get started with Neon:
 
 5. Use this as your `DATABASE_URL` in the next step.
 
-### 3. Set up a Telegram bot (optional but recommended)
+### 4. Set up a Telegram bot (optional but recommended)
 
 >**Video guide:** [How to create a Telegram bot and get your chat ID](https://youtu.be/N8HsT58tXJg?si=pC4WeZIsPIZJMIYF)
 
@@ -104,7 +118,7 @@ The script sends a daily Telegram message with your quota summary. To enable thi
 
 > **Note:** If you skip this step, just omit the `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` secrets. The script will still run and log to the database; quota details will be printed to the Actions log instead.
 
-### 4. Add your secrets
+### 5. Add your secrets
 
 Go to your repository → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
 
@@ -121,7 +135,7 @@ Add each of the following:
 
 > **Note:** Secret names are case-sensitive. They must match exactly as shown above.
 
-### 5. You're all set!
+### 6. You're all set!
 
 That's everything — the workflow is ready to go. It will run automatically every day at **9 PM Cairo time (UTC+2)** without any further setup.
 
@@ -150,6 +164,8 @@ INFO:root:  Remaining Days : 21
 INFO:root:  Overall State  : Over by 11.2 GB (0.8 days)
 INFO:root:──────────────────────────────────────────
 ```
+
+> **Note:** This project may receive future updates, bug fixes, or new features. To get the latest changes, periodically sync your fork with the upstream repository via GitHub's **"Sync fork"** button on your fork's main page.
 
 ---
 

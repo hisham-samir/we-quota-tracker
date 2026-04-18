@@ -2,8 +2,6 @@
   <img width="100%" alt="we-quota-tracker" src="https://github.com/user-attachments/assets/6b2e08e5-ff06-4642-8338-48ef64c1e2e7" />
 </p>
 
-# we-quota-tracker
-
 A Python automation tool that tracks your **WE (Telecom Egypt) home internet quota** daily and logs usage data to a PostgreSQL database. Sends a daily Telegram notification with your quota summary. Can be run locally or fully automated via GitHub Actions.
 
 ---

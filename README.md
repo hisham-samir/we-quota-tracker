@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="100%" alt="we-quota-tracker" src="https://github.com/user-attachments/assets/6b2e08e5-ff06-4642-8338-48ef64c1e2e7" />
+</p>
+
 # we-quota-tracker
 
 A Python automation tool that tracks your **WE (Telecom Egypt) home internet quota** daily and logs usage data to a PostgreSQL database. Sends a daily Telegram notification with your quota summary. Can be run locally or fully automated via GitHub Actions.
@@ -25,6 +29,8 @@ A Python automation tool that tracks your **WE (Telecom Egypt) home internet quo
 6. Runs automatically every day via GitHub Actions scheduled workflow.
 
 > **Note:** On the 1st day of every cycle, the `quota_log` table is automatically **dropped and recreated** for a completely fresh monthly log.
+
+> **Important:** The script currently tracks your **base quota only**. Extra quotas (e.g. add-on GBs purchased separately) are **not supported** and will not be reflected in the calculations.
 
 | Column           | Type          | Description                                                    |
 | ---------------- | ------------- | -------------------------------------------------------------- |
@@ -102,7 +108,11 @@ Here's how to get started with Neon:
 
 ### 4. Set up a Telegram bot (optional but recommended)
 
->**Video guide:** [How to create a Telegram bot and get your chat ID](https://youtu.be/N8HsT58tXJg?si=pC4WeZIsPIZJMIYF)
+The purpose of this step is to get your **Telegram bot token** and **chat ID** — the two values needed to receive daily notifications.
+
+You can either **watch the video guide** or **follow the steps below**:
+
+> **Video guide:** [How to create a Telegram bot and get your chat ID](https://youtu.be/l5YDtSLGhqk?si=bZVeH0hmCDCCK-QK)
 
 The script sends a daily Telegram message with your quota summary. To enable this:
 
@@ -141,7 +151,7 @@ That's everything — the workflow is ready to go. It will run automatically eve
 
 To test it or trigger it manually at any time, go to the **Actions** tab → **Daily Quota Tracker** → **Run workflow**.
 
-If the workflow ran successfully, a new record will be added to your `quota_log` table and you'll receive a Telegram message like this:
+If the workflow ran successfully, a new record will be added to your `quota_log` table and you'll receive a Telegram message like this. To view the table of records, go to your **[Neon dashboard](https://console.neon.tech)** → select your project → **Tables** → **quota_log**:
 
 ```
 Quota Report — Day 9
@@ -153,7 +163,7 @@ Overall State: Over by 11.2 GB (0.8 days)
 ━━━━━━━━━━━━━━━━━━━━
 ```
 
-If Telegram is not configured, the same info will appear in the Actions log instead:
+If Telegram is not configured, the same info will appear in the **Actions log** instead. To find it, go to the **Actions** tab → **Daily Quota Tracker** → click on the latest workflow run → click on the **run-tracker** job → **Run quota tracker**:
 
 ```
 INFO:root:─── Quota Record Saved ───────────────────
